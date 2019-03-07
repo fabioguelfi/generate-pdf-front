@@ -9,7 +9,7 @@ import * as html2canvas from 'html2canvas'
 })
 export class AppComponent {
   protected idViews: Array<string> = ['teste', 'teste2', 'teste3']
-  protected images: Array<string> = []
+  protected images: Array<any> = []
 
   public generateCanvas() {
     return new Promise((resolve, reject) => {
@@ -32,10 +32,15 @@ export class AppComponent {
   public callPDF() {
     this.generateCanvas()
       .then(() => {
+		    const imgWidth = 180;
         const doc = new jsPDF()
+        
         this.images.map((image, i) => {
           const lastIndex = this.images.length - 1
-          doc.addImage(image, 'JPEG', 15, 40, 180, 180)
+          const imgHeight = image.height * imgWidth / image.width;
+
+          doc.addImage(image, 'JPEG', 15, 10, imgWidth, imgHeight);
+
           if (i === lastIndex) {
             doc.save()
           } else {
